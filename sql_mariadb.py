@@ -17,28 +17,18 @@ YEAR(Action.end_date) == '2020';
 """
 
 add_column_query = """
-ALTER TABLE Client ADD sex VARCHAR(1);
+ALTER TABLE Client ADD gender VARCHAR(1);
 """
 
-select_male_mri_query = """
-SELECT COUNT(*) FROM Action 
+select_gender_mri_query = """
+SELECT COUNT(Client.gender) FROM Action 
 INNER JOIN ActionType ON Action.action_type = ActionType.id 
 INNER JOIN Event ON Action.event_id = Event.id 
 INNER JOIN Client ON Event.client_id = Client.id 
 WHERE ActionType.name == 'МРТ' AND 
 YEAR(Action.beg_date) == '2020' AND 
-YEAR(Action.end_date) == '2020' AND
-Client.sex == 'M';
-"""
-select_female_mri_query = """
-SELECT COUNT(*) FROM Action 
-INNER JOIN ActionType ON Action.action_type = ActionType.id 
-INNER JOIN Event ON Action.event_id = Event.id 
-INNER JOIN Client ON Event.client_id = Client.id 
-WHERE ActionType.name == 'МРТ' AND 
-YEAR(Action.beg_date) == '2020' AND 
-YEAR(Action.end_date) == '2020' AND
-Client.sex == 'F';
+YEAR(Action.end_date) == '2020' 
+GROUP BY Client.gender;
 """
 
 create_organisation_query = """
